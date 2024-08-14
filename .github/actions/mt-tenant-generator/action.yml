@@ -18,7 +18,7 @@ runs:
     
     - name: Install curl (for rustup)
       shell: bash
-      run: sudo apt-get update && sudo apt-get install -y curl wget
+      run: apt-get update && apt-get install -y curl wget
            curl --version  # Ensure curl is installed
 
     - name: Set up Rust
@@ -32,7 +32,12 @@ runs:
       run: cargo build --release
       working-directory: ${{ github.workspace }}/rust-tenantizer
 
-    - name: Run Rust package
+    - name: List contents of the target directory
+      shell: bash
+      run: ls -alh ./target/release/
+      working-directory: ${{ github.workspace }}/rust-tenantizer
+      
+    - name: Run Tenantize package
       shell: bash
       run: ./target/release/tenantize "${{ inputs.tenant }}" "${{ inputs.baseURL }}" "${{ inputs.bundleId }}"
-      working-directory: ${{ github.workspace }}/rust-tenantizer
+      working-directory: ${{ github.workspace }}

@@ -4,7 +4,8 @@ on: [push]
 jobs:
   run-rust-package:
     runs-on: ubuntu-latest
-
+    container:
+      image: ubuntu:latest
     steps:
       - name: Checkout the code
         uses: actions/checkout@v2
