@@ -16,7 +16,8 @@ jobs:
         run: ls -alh .github/actions/mt-tenant-generator
       - name: Run Rust Package Action
         # uses: MartinGTechnologies/gh-action-test/.github/actions/mt-tenant-generator@main
-        uses: MartinGTechnologies/gh-action-test/.github/actions/mt-tenant-generator@main
+        # uses: MartinGTechnologies/gh-action-test/.github/actions/mt-tenant-generator@main
+        uses: ./.github/actions/mt-tenant-generator
         with:
           tenant: 'JUPITER'
           baseUrl: 'https://mg.jup.com'
