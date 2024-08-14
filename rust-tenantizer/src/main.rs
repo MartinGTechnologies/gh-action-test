@@ -6,17 +6,18 @@ use tera::{Tera, Context};
 fn main() {
     let args: Vec<String> = env::args().collect();
     if args.len() < 3 {
-        eprintln!("Usage: <facility_name> <base_url>");
+        eprintln!("Usage: <tenant_name> <base_url> <bundleId>");
         return;
     }
 
-    let facility_name = &args[1];
+    let tenant_name = &args[1];
     let base_url = format!("https://{}", &args[2]);
+    let bundle_id = &args[3];
 
     let parent_folder = Path::new("tenants");
     let folders = vec![
-        parent_folder.join(facility_name),
-        parent_folder.join(format!("{}-TEST", facility_name)),
+        parent_folder.join(tenant_name),
+        parent_folder.join(format!("{}-TEST", tenant_name)),
     ];
 
     let file_templates = vec![
@@ -43,14 +44,15 @@ fn main() {
             let file_path = folder.join(file_name);
 
             let app_id_suffix = if site_name.ends_with("-TEST") {
-                format!("{}.test", facility_name.to_lowercase())
+                format!("{}.test", tenant_name.to_lowercase())
             } else {
-                facility_name.to_lowercase()
+                tenant_name.to_lowercase()
             };
 
             let mut context = Context::new();
             context.insert("base_url", &base_url);
             context.insert("site_name", site_name);
+            context.insert("bundle_id", bundle_id)
             context.insert("app_id_suffix", &app_id_suffix);
 
             let content = tera.render(template_name, &context).expect("Failed to render template");
