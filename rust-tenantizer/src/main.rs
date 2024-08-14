@@ -1,20 +1,25 @@
 use std::env;
 use std::fs;
-use std::path::{Path};
+use std::path::{PathBuf};
+use color_eyre::eyre::Result;
 use tera::{Tera, Context};
 
-fn main() {
+fn main() -> Result<()> {
     let args: Vec<String> = env::args().collect();
-    if args.len() < 3 {
+    if args.len() < 4 {
         eprintln!("Usage: <tenant_name> <base_url> <bundleId>");
-        return;
+        return Ok(());
     }
 
     let tenant_name = &args[1];
     let base_url = format!("https://{}", &args[2]);
     let bundle_id = &args[3];
 
-    let parent_folder = Path::new("tenants");
+    // Adjust the paths to be relative to the project root directory
+    let project_root = PathBuf::from(".."); // This assumes the binary is run from rust-tenantizer
+    let parent_folder = project_root.join("tenants");
+    let template_folder = project_root.join("templates");
+
     let folders = vec![
         parent_folder.join(tenant_name),
         parent_folder.join(format!("{}-TEST", tenant_name)),
@@ -26,9 +31,9 @@ fn main() {
         ("datadog.json", "datadog.json"),
     ];
 
-
-    //create an instance of Tera
-    let tera = Tera::new("templates/**/*").expect("Failed to initialize Tera");
+    // Create an instance of Tera
+    let tera = Tera::new(&format!("{}/**/*", template_folder.to_string_lossy()))
+        .expect("Failed to initialize Tera");
 
     for folder in folders {
         if folder.exists() {
@@ -52,11 +57,14 @@ fn main() {
             let mut context = Context::new();
             context.insert("base_url", &base_url);
             context.insert("site_name", site_name);
-            context.insert("bundle_id", bundle_id)
+            context.insert("bundle_id", bundle_id);
             context.insert("app_id_suffix", &app_id_suffix);
 
-            let content = tera.render(template_name, &context).expect("Failed to render template");
+            let content = tera
+                .render(template_name, &context)
+                .expect("Failed to render template");
             fs::write(&file_path, content).expect("Failed to write file");
         }
     }
+    Ok(())
 }
