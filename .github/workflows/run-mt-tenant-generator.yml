@@ -21,3 +21,4 @@ jobs:
           tenant: 'JUPITER'
           baseUrl: 'https://mg.jup.com'
           bundleId: 'com.mg.test.jup'
+          githubToken: ${{ secrets.GITHUB_TOKEN }}

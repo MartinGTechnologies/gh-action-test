@@ -10,7 +10,9 @@ inputs:
   baseURL:
     description: 'Base url for the new tenant (i.e. MT.jmc.com). https will be automatically appended'
     required: true
-
+  githubToken:
+    description: 'GitHub token for authentication'
+    required: true
 runs:
   using: "composite"
   steps:
@@ -44,30 +46,27 @@ runs:
       run: ./target/release/tenantize "${{ inputs.tenant }}" "${{ inputs.baseURL }}" "${{ inputs.bundleId }}"
       working-directory: ${{ github.workspace }}
 
-    - name: Add generated files
-      shell: bash
-      run: git add tenants/${{ inputs.tenant }}/*
-
     - name: Get GitHub User Email
-      id: user_info
+      id: get_user_info
       shell: bash
       run: |
-        user_email=$(curl -s https://api.github.com/users/${{ github.actor }} | jq -r .email)
-        if [ -z "$user_email" ]; then
-          user_email="${{ secrets.DEFAULT_GIT_EMAIL }}"
-        fi
+        user_email=$(curl -s -H "Authorization: token ${{ inputs.githubToken }}" https://api.github.com/users/${{ github.actor }} | jq -r '.email')
+        user_name=$(curl -s -H "Authorization: token ${{ inputs.githubToken }}" https://api.github.com/users/${{ github.actor }} | jq -r '.name')
+        if [ "$user_email" = "null" ]; then user_email="${{ github.actor }}@users.noreply.github.com"; fi
         echo "user_email=$user_email" >> $GITHUB_ENV
+        echo "user_name=$user_name" >> $GITHUB_ENV
 
     - name: Configure Git
       shell: bash
       run: |
-        git config --local user.name "${{ github.actor }}"
+        git config --local user.name "${{ env.user_name }}"
         git config --local user.email "${{ env.user_email }}"
 
     - name: Commit and Push changes
       shell: bash
       run: |
+        git add .
         git commit -m "Auto-commit: Added new tenant files for ${{ inputs.tenant }}"
         git push origin ${{ github.ref }}
       env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        GITHUB_TOKEN: ${{ inputs.githubToken }}
