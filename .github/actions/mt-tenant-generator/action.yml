@@ -25,9 +25,9 @@ runs:
     - name: Build Rust package
       shell: bash
       run: cargo build --release
-      working-directory: ${{ github.workspace }}
+      working-directory: ${{ github.workspace }}/rust-tenantizer
 
     - name: Run Rust package
       shell: bash
-      run: ./target/release/your_binary_name "${{ inputs.tenant }}" "${{ inputs.bundleId }} "${{ inputs.baseURL }}"
+      run: ./target/release/rust-tenantizer "${{ inputs.tenant }}" "${{ inputs.bundleId }} "${{ inputs.baseURL }}"
       working-directory: ${{ github.workspace }}
