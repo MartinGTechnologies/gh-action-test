@@ -43,11 +43,11 @@ runs:
 
     - name: Ensure execute permission
       shell: bash
-      run: chmod +x ./target/release/tenantize
-      
+      run: chmod +x ${{ github.workspace }}/rust-tenantizer/target/release/tenantize
+
     - name: Run Tenantize package
       shell: bash
-      run: ./target/release/tenantize "${{ inputs.tenant }}" "${{ inputs.baseURL }}" "${{ inputs.bundleId }}"
+      run: ${{ github.workspace }}/rust-tenantizer/target/release/tenantize "${{ inputs.tenant }}" "${{ inputs.baseURL }}" "${{ inputs.bundleId }}"
       working-directory: ${{ github.workspace }}
 
     - name: Get GitHub User Email
