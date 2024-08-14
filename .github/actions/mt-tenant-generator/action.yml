@@ -23,9 +23,11 @@ runs:
         override: true
 
     - name: Build Rust package
+      shell: bash
       run: cargo build --release
       working-directory: ${{ github.workspace }}
 
     - name: Run Rust package
+      shell: bash
       run: ./target/release/your_binary_name "${{ inputs.tenant }}" "${{ inputs.bundleId }} "${{ inputs.baseURL }}"
       working-directory: ${{ github.workspace }}
