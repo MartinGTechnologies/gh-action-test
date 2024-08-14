@@ -1,0 +1,23 @@
+name: 'Run Tenant Generator'
+on: [push]
+
+jobs:
+  run-rust-package:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout the code
+        uses: actions/checkout@v2
+
+      - name: Set working directory
+        run: cd ${{ github.workspace }}
+
+      - name: List .github Directory
+        run: ls -alh .github/actions/mt-tenant-generator
+      - name: Run Rust Package Action
+        # uses: MartinGTechnologies/gh-action-test/.github/actions/mt-tenant-generator@main
+        uses: MartinGTechnologies/gh-action-test/.github/actions/mt-tenant-generator@main
+        with:
+          TENANT_NAME: 'JUPITER'
+          baseUrl: 'https://mg.jup.com'
+          appID: 'com.mg.test.jup'

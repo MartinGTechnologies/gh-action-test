@@ -1,0 +1,31 @@
+name: 'MT Tenant Creation'
+description: 'Run the package with user-defined parameters'
+inputs:
+  tenant:
+    description: 'The name of the new tenant to be created (i.e. JUPITER)'
+    required: true
+  bundleId:
+    description: 'The bundle id of the new tenant to be created (i.e. com.angeleye.MT.jupiter)'
+    required: true
+  baseURL:
+    description: 'Base url for the new tenant (i.e. MT.jmc.com). https will be automatically appended'
+    required: true
+runs:
+  using: "composite"
+  steps:
+    - name: Check out the repository
+      uses: actions/checkout@v4
+
+    - name: Set up Rust
+      uses: actions-rs/toolchain@v1
+      with:
+        toolchain: stable
+        override: true
+
+    - name: Build Rust package
+      run: cargo build --release
+      working-directory: ${{ github.workspace }}
+
+    - name: Run Rust package
+      run: ./target/release/your_binary_name "${{ inputs.tenant }}" "${{ inputs.bundleId }} "${{ inputs.baseURL }}"
+      working-directory: ${{ github.workspace }}

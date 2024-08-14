@@ -1,0 +1,7 @@
+{
+    "enabled": true,
+    "clientToken": "6111111",
+    "minimumLogLevel": "debug",
+    "service": "my_client",
+    "site": "{{ site_name }}"
+  }
