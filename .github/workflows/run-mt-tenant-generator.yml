@@ -12,12 +12,12 @@ jobs:
       - name: Set working directory
         run: cd ${{ github.workspace }}
 
-      # - name: List .github Directory
-      #   run: ls -alh .github/actions/mt-tenant-generator
+      - name: List .github Directory
+        run: ls -alh .github/actions/mt-tenant-generator
       - name: Run Rust Package Action
         # uses: MartinGTechnologies/gh-action-test/.github/actions/mt-tenant-generator@main
         uses: MartinGTechnologies/gh-action-test/.github/actions/mt-tenant-generator@main
         with:
-          TENANT_NAME: 'JUPITER'
+          tenant: 'JUPITER'
           baseUrl: 'https://mg.jup.com'
-          appID: 'com.mg.test.jup'
+          bundleId: 'com.mg.test.jup'
