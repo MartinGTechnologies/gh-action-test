@@ -6,11 +6,11 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      # - name: Checkout the code
-      #   uses: actions/checkout@v2
+      - name: Checkout the code
+        uses: actions/checkout@v2
 
-      # - name: Set working directory
-      #   run: cd ${{ github.workspace }}
+      - name: Set working directory
+        run: cd ${{ github.workspace }}
 
       # - name: List .github Directory
       #   run: ls -alh .github/actions/mt-tenant-generator
