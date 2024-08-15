@@ -45,6 +45,10 @@ runs:
       shell: bash
       run: chmod +x ${{ github.workspace }}/rust-tenantizer/target/release/tenantize
 
+    - name: Debug template directory
+      shell: bash
+      run: ls -alh /home/runner/work/gh-action-test/gh-action-test/rust-tenantizer/templates/
+      
     - name: Run Tenantize package
       shell: bash
       run: ${{ github.workspace }}/rust-tenantizer/target/release/tenantize "${{ inputs.tenant }}" "${{ inputs.baseURL }}" "${{ inputs.bundleId }}"

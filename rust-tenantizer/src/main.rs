@@ -17,6 +17,7 @@ fn main() -> Result<()> {
 
     // Adjust the paths to be relative to the project root directory
     let project_root = PathBuf::from(".."); // This assumes the binary is run from rust-tenantizer
+    //TODO: binary should be able to be run from any place, should this matter?
     let parent_folder = project_root.join("tenants");
     let template_folder = project_root.join("templates");
 
