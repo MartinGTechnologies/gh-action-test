@@ -1,6 +1,6 @@
 use std::env;
 use std::fs;
-use std::path::{PathBuf};
+use std::path::{Path, PathBuf};
 use color_eyre::eyre::Result;
 use tera::{Tera, Context};
 
@@ -19,11 +19,11 @@ fn main() -> Result<()> {
     let project_root = PathBuf::from(".."); // This assumes the binary is run from rust-tenantizer
     //TODO: binary should be able to be run from any place, should this matter?
     let parent_folder = project_root.join("tenants");
-    let template_folder = project_root.join("templates");
+    let template_folder = Path::new("templates");
 
     let folders = vec![
-        parent_folder.join(tenant_name),
-        parent_folder.join(format!("{}-TEST", tenant_name)),
+        parent_folder.join(tenant_name.to_uppercase()),
+        parent_folder.join(format!("{}-TEST", tenant_name.to_uppercase())),
     ];
 
     let file_templates = vec![
